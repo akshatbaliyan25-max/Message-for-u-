@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Forever</title>
+<title>For You</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; }
@@ -28,11 +28,16 @@
     100% { background-position: 0% 50%; }
   }
 
+  button {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><text y="20" font-size="20">🌹</text></svg>') 15 15, pointer;
+  }
+
+  /* Continuous floating hearts in the background */
   .bgheart {
     position: fixed;
     bottom: -50px;
     font-size: 22px;
-    opacity: 0.6;
+    opacity: 0.55;
     animation: floatUp linear infinite;
     pointer-events: none;
     z-index: 1;
@@ -43,41 +48,346 @@
     100% { transform: translateY(-115vh) rotate(300deg); opacity: 0; }
   }
 
-  .final-text {
-    font-size: 46px;
-    font-weight: 700;
-    color: #c2185b;
-    text-shadow: 0 4px 24px rgba(255,143,171,0.6);
+  /* Flying birds/rose petals across screen */
+  .bird {
+    position: fixed;
+    top: var(--y, 50%);
+    left: -60px;
+    font-size: 24px;
+    opacity: 0.9;
+    animation: flyAcross linear forwards;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  @keyframes flyAcross {
+    0%   { transform: translateX(0) translateY(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateX(115vw) translateY(-40px); opacity: 0; }
+  }
+
+  .flyheart {
+    position: fixed;
+    top: var(--y, 50%);
+    left: -60px;
+    font-size: 24px;
+    opacity: 0.9;
+    animation: flyAcross linear forwards;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  .confetti {
+    position: fixed;
+    top: -40px;
+    font-size: 16px;
+    color: #b5477a;
+    font-family: Georgia, serif;
+    font-style: italic;
+    opacity: 0.9;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+    z-index: 40;
+  }
+
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translateY(105vh) rotate(280deg); opacity: 0; }
+  }
+
+  .card {
+    background: #fffaf3;
+    border-radius: 20px;
+    padding: 55px 45px;
+    max-width: 460px;
+    width: 90%;
+    min-height: 240px;
     text-align: center;
+    box-shadow: 0 25px 60px rgba(200,120,150,0.25), 0 0 0 1px rgba(230,180,150,0.4);
     z-index: 10;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: heartbeat 2.4s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    12% { transform: scale(1.015); }
+    24% { transform: scale(1); }
+    36% { transform: scale(1.025); }
+    48% { transform: scale(1); }
+  }
+
+  .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
+  .screen.active { display: flex; }
+
+  .question {
+    font-size: 24px;
+    color: #a13d63;
+    margin-bottom: 30px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+  }
+
+  .reveal-text {
+    font-size: 22px;
+    color: #c2185b;
+    font-style: italic;
+    margin-top: 20px;
     opacity: 0;
-    animation: fadeInUp 1.4s ease forwards;
-    animation-delay: 0.3s;
-    letter-spacing: 1px;
+    animation: fadeInUp 0.8s ease forwards;
   }
 
   @keyframes fadeInUp {
-    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
+
+  .buttons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+
+  button {
+    border: none;
+    padding: 13px 30px;
+    font-size: 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-family: Georgia, serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: linear-gradient(135deg, #ff8fab, #ffb4a2);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(255,143,171,0.45);
+  }
+
+  .no-btn {
+    background: #fbe4e8;
+    color: #a13d63;
+    box-shadow: none;
+  }
+
+  button:hover { transform: translateY(-2px) scale(1.04); }
+
+  .subtext {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #c48a9c;
+    font-style: italic;
+  }
+
+  #soundToggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    color: #a13d63;
+    font-size: 16px;
+    padding: 0;
+    box-shadow: none;
+    z-index: 60;
+  }
+
+  #easterEgg {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    font-size: 14px;
+    opacity: 0.3;
+    z-index: 60;
+    background: none;
+    box-shadow: none;
+    padding: 6px;
+    color: #a13d63;
+  }
+
+  #easterEgg:hover { opacity: 0.7; }
+
+  #easterMsg {
+    position: fixed;
+    bottom: 40px;
+    left: 16px;
+    background: #fffaf3;
+    color: #a13d63;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-style: italic;
+    max-width: 220px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 60;
+    pointer-events: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  #easterMsg.show { opacity: 1; }
 </style>
 </head>
-<body>
+<body id="bodyEl">
 
-  <div class="final-text">LOVE U FOREVER 💗</div>
+  <button id="soundToggle" onclick="toggleSound()">🔇</button>
+  <button id="easterEgg" onclick="showEasterEgg()">♡</button>
+  <div id="easterMsg">You found me 🥰 I love you extra today.</div>
+
+  <div class="card" id="cardEl">
+
+    <div class="screen active" id="screenAsk">
+      <div class="question">I have a message for you 💌</div>
+      <div class="buttons">
+        <button onclick="playBirdsThenReveal()">Yes</button>
+        <button class="no-btn" onclick="goTo('screenPleaseYes')">No</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screenPleaseYes">
+      <div class="question">But please, see the message 🥺</div>
+      <div class="buttons">
+        <button onclick="playBirdsThenReveal()">Yes</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screenMsg1">
+      <div class="question">You know, there's a problem in my hand.</div>
+      <div class="buttons" id="problemBtnWrap">
+        <button onclick="revealProblem()">What's the problem?</button>
+      </div>
+      <div class="reveal-text" id="problemReveal" style="display:none;">It's not holding yours.</div>
+      <div class="buttons" id="nextMsgWrap" style="display:none; margin-top: 24px;">
+        <button onclick="playHeartsThenReveal()">See another message</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screenColor">
+      <div class="question">What's my favorite color?</div>
+      <div class="buttons" id="colorBtnWrap">
+        <button onclick="revealColor()">Tell me</button>
+      </div>
+      <div class="reveal-text" id="colorReveal" style="display:none;">The color of your eyes 💙</div>
+      <div class="buttons" id="continueWrap" style="display:none; margin-top: 24px;">
+        <button onclick="goToNext()">Continue</button>
+      </div>
+    </div>
+
+  </div>
 
 <script>
+  let soundEnabled = false;
+  let audioCtx = null;
+
+  function goTo(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  function goToNext() {
+    window.location.href = "forever.html";
+  }
+
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById("soundToggle").textContent = soundEnabled ? "🔊" : "🔇";
+    if (soundEnabled && !audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+
+  function playChime() {
+    if (!soundEnabled || !audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 720;
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.15);
+  }
+
+  document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("mouseenter", playChime);
+  });
+
+  function showEasterEgg() {
+    const msg = document.getElementById("easterMsg");
+    msg.classList.add("show");
+    setTimeout(() => msg.classList.remove("show"), 3000);
+  }
+
+  function playBirdsThenReveal() {
+    spawnFlock("bird", "🕊️", () => goTo("screenMsg1"));
+  }
+
+  function playHeartsThenReveal() {
+    spawnFlock("flyheart", "💗", () => goTo("screenColor"));
+  }
+
+  function spawnFlock(className, emoji, onDone) {
+    const count = 7;
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const el = document.createElement("div");
+        el.classList.add(className);
+        el.textContent = emoji;
+        el.style.setProperty("--y", (10 + Math.random() * 70) + "vh");
+        el.style.animationDuration = (2 + Math.random() * 1.2) + "s";
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+      }, i * 180);
+    }
+    setTimeout(onDone, 1600);
+  }
+
+  function revealProblem() {
+    document.getElementById("problemBtnWrap").style.display = "none";
+    document.getElementById("problemReveal").style.display = "block";
+    document.getElementById("nextMsgWrap").style.display = "flex";
+    spawnConfetti();
+  }
+
+  function revealColor() {
+    document.getElementById("colorBtnWrap").style.display = "none";
+    document.getElementById("colorReveal").style.display = "block";
+    document.getElementById("continueWrap").style.display = "flex";
+    spawnConfetti();
+  }
+
+  function spawnConfetti() {
+    const items = ["♥", "always", "♥", "yours", "♥", "forever", "♥"];
+    for (let i = 0; i < 24; i++) {
+      setTimeout(() => {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+        c.textContent = items[Math.floor(Math.random() * items.length)];
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.fontSize = (13 + Math.random() * 10) + "px";
+        c.style.animationDuration = (3 + Math.random() * 2.5) + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 6000);
+      }, i * 60);
+    }
+  }
+
+  // Continuous floating hearts filling the background at all times
   function createBgHeart() {
     const h = document.createElement("div");
     h.classList.add("bgheart");
     h.textContent = ["💗", "💖", "💕", "🌸", "✨"][Math.floor(Math.random() * 5)];
     h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = (14 + Math.random() * 22) + "px";
+    h.style.fontSize = (14 + Math.random() * 18) + "px";
     h.style.animationDuration = (7 + Math.random() * 6) + "s";
     document.body.appendChild(h);
     setTimeout(() => h.remove(), 14000);
   }
-  setInterval(createBgHeart, 500);
+  setInterval(createBgHeart, 650);
 </script>
 
 </body>
