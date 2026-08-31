@@ -10,51 +10,88 @@
 
   body {
     min-height: 100vh;
-    font-family: Georgia, 'Times New Roman', serif;
-    background: linear-gradient(-45deg, #ffe0e9, #ffd6cc, #ffe8d6, #f6d9f2);
-    background-size: 400% 400%;
-    animation: gradientShift 16s ease infinite;
+    font-family: 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+    background: radial-gradient(ellipse at top, #1b2340 0%, #0d1226 55%, #05070f 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     position: relative;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><text y="20" font-size="20">🌹</text></svg>') 15 15, auto;
-  }
-
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text y="18" font-size="18">✨</text></svg>') 13 13, auto;
   }
 
   button {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><text y="20" font-size="20">🌹</text></svg>') 15 15, pointer;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text y="18" font-size="18">✨</text></svg>') 13 13, pointer;
   }
 
-  /* Continuous floating hearts in the background */
-  .bgheart {
+  /* Twinkling stars scattered across the whole sky */
+  .star {
     position: fixed;
-    bottom: -50px;
-    font-size: 22px;
-    opacity: 0.55;
-    animation: floatUp linear infinite;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: twinkle ease-in-out infinite;
     pointer-events: none;
     z-index: 1;
   }
 
-  @keyframes floatUp {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-    100% { transform: translateY(-115vh) rotate(300deg); opacity: 0; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 1; }
   }
 
-  /* Flying birds/rose petals across screen */
-  .bird {
+  /* Moon, fixed near the top */
+  .moon {
+    position: fixed;
+    top: 6%;
+    right: 10%;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fffdf5, #f2ecd0 60%, #e4dcb8 100%);
+    box-shadow: 0 0 50px 14px rgba(255, 250, 220, 0.35);
+    z-index: 2;
+  }
+
+  /* Clouds confined to the top band only */
+  .cloud {
+    position: fixed;
+    top: 4%;
+    width: 220px;
+    height: 60px;
+    background: rgba(255,255,255,0.10);
+    border-radius: 100px;
+    filter: blur(6px);
+    animation: driftCloud linear infinite;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: rgba(255,255,255,0.10);
+    border-radius: 50%;
+  }
+
+  .cloud::before { width: 90px; height: 90px; top: -35px; left: 20px; }
+  .cloud::after { width: 70px; height: 70px; top: -25px; right: 25px; }
+
+  .cloud2 { top: 10%; opacity: 0.7; }
+  .cloud3 { top: 2%; opacity: 0.5; }
+
+  @keyframes driftCloud {
+    0% { transform: translateX(-30vw); }
+    100% { transform: translateX(130vw); }
+  }
+
+  /* Shooting stars flying across (message reveal moments) */
+  .shootingstar {
     position: fixed;
     top: var(--y, 50%);
     left: -60px;
-    font-size: 24px;
-    opacity: 0.9;
+    font-size: 22px;
+    opacity: 0.95;
     animation: flyAcross linear forwards;
     pointer-events: none;
     z-index: 50;
@@ -67,23 +104,23 @@
     100% { transform: translateX(115vw) translateY(-40px); opacity: 0; }
   }
 
-  .flyheart {
+  .wishstar {
     position: fixed;
     top: var(--y, 50%);
     left: -60px;
-    font-size: 24px;
-    opacity: 0.9;
+    font-size: 20px;
+    opacity: 0.95;
     animation: flyAcross linear forwards;
     pointer-events: none;
     z-index: 50;
   }
 
+  /* Sparkle confetti for reveal moments */
   .confetti {
     position: fixed;
     top: -40px;
-    font-size: 16px;
-    color: #b5477a;
-    font-family: Georgia, serif;
+    font-size: 15px;
+    color: #d8d0ff;
     font-style: italic;
     opacity: 0.9;
     animation: confettiFall linear forwards;
@@ -98,46 +135,39 @@
   }
 
   .card {
-    background: #fffaf3;
-    border-radius: 20px;
+    background: rgba(20, 26, 50, 0.55);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
     padding: 55px 45px;
     max-width: 460px;
     width: 90%;
     min-height: 240px;
     text-align: center;
-    box-shadow: 0 25px 60px rgba(200,120,150,0.25), 0 0 0 1px rgba(230,180,150,0.4);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.5), 0 0 40px rgba(150,170,255,0.08);
     z-index: 10;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    animation: heartbeat 2.4s ease-in-out infinite;
-  }
-
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    12% { transform: scale(1.015); }
-    24% { transform: scale(1); }
-    36% { transform: scale(1.025); }
-    48% { transform: scale(1); }
   }
 
   .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
   .screen.active { display: flex; }
 
   .question {
-    font-size: 24px;
-    color: #a13d63;
+    font-size: 23px;
+    color: #f2f3fb;
     margin-bottom: 30px;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.5;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
   }
 
   .reveal-text {
-    font-size: 22px;
-    color: #c2185b;
+    font-size: 21px;
+    color: #c9d3ff;
     font-style: italic;
     margin-top: 20px;
     opacity: 0;
@@ -152,30 +182,33 @@
   .buttons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
 
   button {
-    border: none;
-    padding: 13px 30px;
-    font-size: 16px;
-    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 12px 28px;
+    font-size: 15px;
+    border-radius: 8px;
     font-weight: 600;
-    font-family: Georgia, serif;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background: linear-gradient(135deg, #ff8fab, #ffb4a2);
-    color: #fff;
-    box-shadow: 0 8px 18px rgba(255,143,171,0.45);
+    font-family: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    background: rgba(255,255,255,0.08);
+    color: #f2f3fb;
   }
 
   .no-btn {
-    background: #fbe4e8;
-    color: #a13d63;
-    box-shadow: none;
+    background: transparent;
+    border-color: rgba(255,255,255,0.15);
+    color: #9aa3c9;
   }
 
-  button:hover { transform: translateY(-2px) scale(1.04); }
+  button:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.16);
+    box-shadow: 0 8px 20px rgba(150,170,255,0.2);
+  }
 
   .subtext {
     margin-top: 18px;
     font-size: 13px;
-    color: #c48a9c;
+    color: #8790b8;
     font-style: italic;
   }
 
@@ -186,11 +219,11 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.5);
-    color: #a13d63;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #f2f3fb;
     font-size: 16px;
     padding: 0;
-    box-shadow: none;
     z-index: 60;
   }
 
@@ -202,19 +235,20 @@
     opacity: 0.3;
     z-index: 60;
     background: none;
-    box-shadow: none;
+    border: none;
     padding: 6px;
-    color: #a13d63;
+    color: #c9d3ff;
   }
 
-  #easterEgg:hover { opacity: 0.7; }
+  #easterEgg:hover { opacity: 0.8; }
 
   #easterMsg {
     position: fixed;
     bottom: 40px;
     left: 16px;
-    background: #fffaf3;
-    color: #a13d63;
+    background: rgba(20, 26, 50, 0.9);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #f2f3fb;
     padding: 10px 16px;
     border-radius: 8px;
     font-size: 13px;
@@ -224,7 +258,6 @@
     transition: opacity 0.4s ease;
     z-index: 60;
     pointer-events: none;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   }
 
   #easterMsg.show { opacity: 1; }
@@ -232,8 +265,13 @@
 </head>
 <body id="bodyEl">
 
+  <div class="moon"></div>
+  <div class="cloud" style="animation-duration: 70s;"></div>
+  <div class="cloud cloud2" style="animation-duration: 95s; animation-delay: -30s;"></div>
+  <div class="cloud cloud3" style="animation-duration: 110s; animation-delay: -60s;"></div>
+
   <button id="soundToggle" onclick="toggleSound()">🔇</button>
-  <button id="easterEgg" onclick="showEasterEgg()">♡</button>
+  <button id="easterEgg" onclick="showEasterEgg()">✦</button>
   <div id="easterMsg">You found me 🥰 I love you extra today.</div>
 
   <div class="card" id="cardEl">
@@ -241,7 +279,7 @@
     <div class="screen active" id="screenAsk">
       <div class="question">I have a message for you 💌</div>
       <div class="buttons">
-        <button onclick="playBirdsThenReveal()">Yes</button>
+        <button onclick="playFlockThenReveal()">Yes</button>
         <button class="no-btn" onclick="goTo('screenPleaseYes')">No</button>
       </div>
     </div>
@@ -249,7 +287,7 @@
     <div class="screen" id="screenPleaseYes">
       <div class="question">But please, see the message 🥺</div>
       <div class="buttons">
-        <button onclick="playBirdsThenReveal()">Yes</button>
+        <button onclick="playFlockThenReveal()">Yes</button>
       </div>
     </div>
 
@@ -260,7 +298,7 @@
       </div>
       <div class="reveal-text" id="problemReveal" style="display:none;">It's not holding yours.</div>
       <div class="buttons" id="nextMsgWrap" style="display:none; margin-top: 24px;">
-        <button onclick="playHeartsThenReveal()">See another message</button>
+        <button onclick="playWishStarsThenReveal()">See another message</button>
       </div>
     </div>
 
@@ -303,7 +341,7 @@
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = "sine";
-    osc.frequency.value = 720;
+    osc.frequency.value = 660;
     gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
     osc.connect(gain);
@@ -322,12 +360,12 @@
     setTimeout(() => msg.classList.remove("show"), 3000);
   }
 
-  function playBirdsThenReveal() {
-    spawnFlock("bird", "🕊️", () => goTo("screenMsg1"));
+  function playFlockThenReveal() {
+    spawnFlock("shootingstar", "🌠", () => goTo("screenMsg1"));
   }
 
-  function playHeartsThenReveal() {
-    spawnFlock("flyheart", "💗", () => goTo("screenColor"));
+  function playWishStarsThenReveal() {
+    spawnFlock("wishstar", "⭐", () => goTo("screenColor"));
   }
 
   function spawnFlock(className, emoji, onDone) {
@@ -361,7 +399,7 @@
   }
 
   function spawnConfetti() {
-    const items = ["♥", "always", "♥", "yours", "♥", "forever", "♥"];
+    const items = ["✦", "always", "✦", "yours", "✦", "forever", "✦"];
     for (let i = 0; i < 24; i++) {
       setTimeout(() => {
         const c = document.createElement("div");
@@ -376,18 +414,23 @@
     }
   }
 
-  // Continuous floating hearts filling the background at all times
-  function createBgHeart() {
-    const h = document.createElement("div");
-    h.classList.add("bgheart");
-    h.textContent = ["💗", "💖", "💕", "🌸", "✨"][Math.floor(Math.random() * 5)];
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = (14 + Math.random() * 18) + "px";
-    h.style.animationDuration = (7 + Math.random() * 6) + "s";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 14000);
+  // Generate a fixed field of twinkling stars once on load
+  function generateStars() {
+    const count = 90;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement("div");
+      s.classList.add("star");
+      const size = 1 + Math.random() * 2;
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = Math.random() * 100 + "vh";
+      s.style.animationDuration = (2 + Math.random() * 4) + "s";
+      s.style.animationDelay = (Math.random() * 4) + "s";
+      document.body.appendChild(s);
+    }
   }
-  setInterval(createBgHeart, 650);
+  generateStars();
 </script>
 
 </body>
