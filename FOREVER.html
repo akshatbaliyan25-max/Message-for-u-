@@ -10,74 +10,162 @@
 
   body {
     min-height: 100vh;
-    font-family: Georgia, 'Times New Roman', serif;
-    background: linear-gradient(-45deg, #ffe0e9, #ffd6cc, #ffe8d6, #f6d9f2);
-    background-size: 400% 400%;
-    animation: gradientShift 16s ease infinite;
+    font-family: 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+    background: radial-gradient(ellipse at top, #1b2340 0%, #0d1226 55%, #05070f 100%);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     position: relative;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><text y="20" font-size="20">🌹</text></svg>') 15 15, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text y="18" font-size="18">✨</text></svg>') 13 13, auto;
   }
 
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  .bgheart {
+  .star {
     position: fixed;
-    bottom: -50px;
-    font-size: 22px;
-    opacity: 0.6;
-    animation: floatUp linear infinite;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: twinkle ease-in-out infinite;
     pointer-events: none;
     z-index: 1;
   }
 
-  @keyframes floatUp {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-    100% { transform: translateY(-115vh) rotate(300deg); opacity: 0; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 1; }
+  }
+
+  .moon {
+    position: fixed;
+    top: 6%;
+    right: 10%;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fffdf5, #f2ecd0 60%, #e4dcb8 100%);
+    box-shadow: 0 0 50px 14px rgba(255, 250, 220, 0.35);
+    z-index: 2;
+  }
+
+  .cloud {
+    position: fixed;
+    top: 4%;
+    width: 220px;
+    height: 60px;
+    background: rgba(255,255,255,0.10);
+    border-radius: 100px;
+    filter: blur(6px);
+    animation: driftCloud linear infinite;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: rgba(255,255,255,0.10);
+    border-radius: 50%;
+  }
+
+  .cloud::before { width: 90px; height: 90px; top: -35px; left: 20px; }
+  .cloud::after { width: 70px; height: 70px; top: -25px; right: 25px; }
+
+  .cloud2 { top: 10%; opacity: 0.7; }
+  .cloud3 { top: 2%; opacity: 0.5; }
+
+  @keyframes driftCloud {
+    0% { transform: translateX(-30vw); }
+    100% { transform: translateX(130vw); }
+  }
+
+  .constellation {
+    z-index: 10;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards;
+    animation-delay: 0.3s;
+  }
+
+  .constellation path {
+    fill: none;
+    stroke: #d8d0ff;
+    stroke-width: 1.5;
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: drawHeart 2.5s ease forwards;
+    animation-delay: 0.6s;
+    filter: drop-shadow(0 0 6px rgba(216,208,255,0.7));
+  }
+
+  .constellation circle {
+    fill: #fff;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.9));
+  }
+
+  @keyframes drawHeart {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
   }
 
   .final-text {
-    font-size: 46px;
+    font-size: 42px;
     font-weight: 700;
-    color: #c2185b;
-    text-shadow: 0 4px 24px rgba(255,143,171,0.6);
+    color: #f2f3fb;
+    text-shadow: 0 4px 30px rgba(150,170,255,0.5);
     text-align: center;
     z-index: 10;
     opacity: 0;
     animation: fadeInUp 1.4s ease forwards;
-    animation-delay: 0.3s;
+    animation-delay: 1.8s;
     letter-spacing: 1px;
   }
 
   @keyframes fadeInUp {
-    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
 <body>
 
-  <div class="final-text">LOVE U FOREVER 💗</div>
+  <div class="moon"></div>
+  <div class="cloud" style="animation-duration: 70s;"></div>
+  <div class="cloud cloud2" style="animation-duration: 95s; animation-delay: -30s;"></div>
+  <div class="cloud cloud3" style="animation-duration: 110s; animation-delay: -60s;"></div>
+
+  <svg class="constellation" width="160" height="140" viewBox="0 0 160 140">
+    <path d="M80,120 C40,90 10,60 10,35 C10,10 35,0 55,15 C65,22 75,32 80,42 C85,32 95,22 105,15 C125,0 150,10 150,35 C150,60 120,90 80,120 Z" />
+    <circle cx="10" cy="35" r="2.5" />
+    <circle cx="55" cy="15" r="2.5" />
+    <circle cx="80" cy="42" r="2.5" />
+    <circle cx="105" cy="15" r="2.5" />
+    <circle cx="150" cy="35" r="2.5" />
+    <circle cx="80" cy="120" r="2.5" />
+  </svg>
+
+  <div class="final-text">LOVE U FOREVER</div>
 
 <script>
-  function createBgHeart() {
-    const h = document.createElement("div");
-    h.classList.add("bgheart");
-    h.textContent = ["💗", "💖", "💕", "🌸", "✨"][Math.floor(Math.random() * 5)];
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = (14 + Math.random() * 22) + "px";
-    h.style.animationDuration = (7 + Math.random() * 6) + "s";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 14000);
+  function generateStars() {
+    const count = 100;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement("div");
+      s.classList.add("star");
+      const size = 1 + Math.random() * 2;
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = Math.random() * 100 + "vh";
+      s.style.animationDuration = (2 + Math.random() * 4) + "s";
+      s.style.animationDelay = (Math.random() * 4) + "s";
+      document.body.appendChild(s);
+    }
   }
-  setInterval(createBgHeart, 500);
+  generateStars();
 </script>
 
 </body>
