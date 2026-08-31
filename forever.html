@@ -79,28 +79,42 @@
     100% { transform: translateX(130vw); }
   }
 
+  /* Constellation heart */
   .constellation {
-    z-index: 10;
-    margin-bottom: 20px;
+    width: 220px;
+    height: 200px;
+    margin-bottom: 22px;
     opacity: 0;
     animation: fadeIn 1.5s ease forwards;
     animation-delay: 0.3s;
+    z-index: 10;
   }
 
   .constellation path {
     fill: none;
     stroke: #d8d0ff;
-    stroke-width: 1.5;
-    stroke-dasharray: 300;
-    stroke-dashoffset: 300;
-    animation: drawHeart 2.5s ease forwards;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawHeart 2.8s ease forwards;
     animation-delay: 0.6s;
     filter: drop-shadow(0 0 6px rgba(216,208,255,0.7));
   }
 
-  .constellation circle {
+  .constellation .pt {
     fill: #fff;
-    filter: drop-shadow(0 0 4px rgba(255,255,255,0.9));
+    opacity: 0;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.95));
+    animation: starPop 0.5s ease forwards;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @keyframes starPop {
+    0%   { opacity: 0; transform: scale(0); }
+    60%  { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 1; transform: scale(1); }
   }
 
   @keyframes drawHeart {
@@ -111,17 +125,32 @@
     to { opacity: 1; }
   }
 
+  .quote-text {
+    font-size: 20px;
+    color: #e8e4ff;
+    font-style: italic;
+    text-align: center;
+    max-width: 380px;
+    line-height: 1.65;
+    padding: 0 20px;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeInUp 1.4s ease forwards;
+    animation-delay: 3.6s;
+  }
+
   .final-text {
-    font-size: 42px;
+    font-size: 26px;
     font-weight: 700;
+    letter-spacing: 2px;
     color: #f2f3fb;
     text-shadow: 0 4px 30px rgba(150,170,255,0.5);
     text-align: center;
     z-index: 10;
     opacity: 0;
     animation: fadeInUp 1.4s ease forwards;
-    animation-delay: 1.8s;
-    letter-spacing: 1px;
+    animation-delay: 5.0s;
+    margin-top: 20px;
   }
 
   @keyframes fadeInUp {
@@ -137,15 +166,27 @@
   <div class="cloud cloud2" style="animation-duration: 95s; animation-delay: -30s;"></div>
   <div class="cloud cloud3" style="animation-duration: 110s; animation-delay: -60s;"></div>
 
-  <svg class="constellation" width="160" height="140" viewBox="0 0 160 140">
-    <path d="M80,120 C40,90 10,60 10,35 C10,10 35,0 55,15 C65,22 75,32 80,42 C85,32 95,22 105,15 C125,0 150,10 150,35 C150,60 120,90 80,120 Z" />
-    <circle cx="10" cy="35" r="2.5" />
-    <circle cx="55" cy="15" r="2.5" />
-    <circle cx="80" cy="42" r="2.5" />
-    <circle cx="105" cy="15" r="2.5" />
-    <circle cx="150" cy="35" r="2.5" />
-    <circle cx="80" cy="120" r="2.5" />
+  <svg class="constellation" width="220" height="200" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+    <path d="M110,60 L115.4,43.7 L143.9,20.4 L185.7,27.9 L206,66 L185.7,109.7 L143.9,147.6 L115.4,178.7 L110,192 L104.6,178.7 L76.1,147.6 L34.3,109.7 L14,66 L34.3,27.9 L66.1,20.4 L104.6,43.7 Z" />
+    <circle class="pt" cx="110"   cy="60"   r="3"   style="animation-delay:0.60s" />
+    <circle class="pt" cx="115.4" cy="43.7" r="3"   style="animation-delay:0.79s" />
+    <circle class="pt" cx="143.9" cy="20.4" r="3"   style="animation-delay:0.97s" />
+    <circle class="pt" cx="185.7" cy="27.9" r="3"   style="animation-delay:1.16s" />
+    <circle class="pt" cx="206"   cy="66"   r="3"   style="animation-delay:1.35s" />
+    <circle class="pt" cx="185.7" cy="109.7" r="3"  style="animation-delay:1.53s" />
+    <circle class="pt" cx="143.9" cy="147.6" r="3"  style="animation-delay:1.72s" />
+    <circle class="pt" cx="115.4" cy="178.7" r="3"  style="animation-delay:1.91s" />
+    <circle class="pt" cx="110"   cy="192"   r="3.5" style="animation-delay:2.09s" />
+    <circle class="pt" cx="104.6" cy="178.7" r="3"  style="animation-delay:2.28s" />
+    <circle class="pt" cx="76.1"  cy="147.6" r="3"  style="animation-delay:2.47s" />
+    <circle class="pt" cx="34.3"  cy="109.7" r="3"  style="animation-delay:2.65s" />
+    <circle class="pt" cx="14"    cy="66"    r="3"  style="animation-delay:2.84s" />
+    <circle class="pt" cx="34.3"  cy="27.9"  r="3"  style="animation-delay:3.03s" />
+    <circle class="pt" cx="66.1"  cy="20.4"  r="3"  style="animation-delay:3.21s" />
+    <circle class="pt" cx="104.6" cy="43.7"  r="3"  style="animation-delay:3.40s" />
   </svg>
+
+  <div class="quote-text">"If I could give you anything, it would be my eyes — so you could see, through them, just how beautiful you truly are."</div>
 
   <div class="final-text">LOVE U FOREVER</div>
 
@@ -169,5 +210,4 @@
 </script>
 
 </body>
-</html>
 </html>
