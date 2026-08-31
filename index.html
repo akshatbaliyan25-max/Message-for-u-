@@ -309,7 +309,19 @@
       </div>
       <div class="reveal-text" id="colorReveal" style="display:none;">The color of your eyes 💙</div>
       <div class="buttons" id="continueWrap" style="display:none; margin-top: 24px;">
-        <button onclick="goToNext()">Continue</button>
+        <button onclick="goTo('screenHeart')">Continue</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screenHeart">
+      <div class="question">Do you have a heart? 🤍</div>
+      <div class="buttons" id="heartBtnWrap">
+        <button onclick="revealHeart(true)">Yes</button>
+        <button class="no-btn" onclick="revealHeart(false)">No</button>
+      </div>
+      <div class="reveal-text" id="heartReveal" style="display:none;"></div>
+      <div class="buttons" id="queenWrap" style="display:none; margin-top: 24px;">
+        <button onclick="goToNext()">Press if u r Queen 👑</button>
       </div>
     </div>
 
@@ -395,6 +407,17 @@
     document.getElementById("colorBtnWrap").style.display = "none";
     document.getElementById("colorReveal").style.display = "block";
     document.getElementById("continueWrap").style.display = "flex";
+    spawnConfetti();
+  }
+
+  function revealHeart(hasHeart) {
+    document.getElementById("heartBtnWrap").style.display = "none";
+    const reveal = document.getElementById("heartReveal");
+    reveal.textContent = hasHeart
+      ? "Then why are you stealing mine? 💘"
+      : "Is that why you're stealing mine? 😏";
+    reveal.style.display = "block";
+    document.getElementById("queenWrap").style.display = "flex";
     spawnConfetti();
   }
 
