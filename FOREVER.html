@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Forever</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    min-height: 100vh;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: linear-gradient(-45deg, #ffe0e9, #ffd6cc, #ffe8d6, #f6d9f2);
+    background-size: 400% 400%;
+    animation: gradientShift 16s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><text y="20" font-size="20">🌹</text></svg>') 15 15, auto;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .bgheart {
+    position: fixed;
+    bottom: -50px;
+    font-size: 22px;
+    opacity: 0.6;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    100% { transform: translateY(-115vh) rotate(300deg); opacity: 0; }
+  }
+
+  .final-text {
+    font-size: 46px;
+    font-weight: 700;
+    color: #c2185b;
+    text-shadow: 0 4px 24px rgba(255,143,171,0.6);
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeInUp 1.4s ease forwards;
+    animation-delay: 0.3s;
+    letter-spacing: 1px;
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="final-text">LOVE U FOREVER 💗</div>
+
+<script>
+  function createBgHeart() {
+    const h = document.createElement("div");
+    h.classList.add("bgheart");
+    h.textContent = ["💗", "💖", "💕", "🌸", "✨"][Math.floor(Math.random() * 5)];
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = (14 + Math.random() * 22) + "px";
+    h.style.animationDuration = (7 + Math.random() * 6) + "s";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 14000);
+  }
+  setInterval(createBgHeart, 500);
+</script>
+
+</body>
+</html>
