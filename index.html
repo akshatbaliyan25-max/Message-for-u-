@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For You</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    min-height: 100vh;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: radial-gradient(ellipse at center, #4a1030 0%, #2a0a1c 55%, #1a0512 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><text y="20" font-size="20">🕊️</text></svg>') 15 15, auto;
+  }
+
+  button {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><text y="20" font-size="20">🕊️</text></svg>') 15 15, pointer;
+  }
+
+  /* Flying birds */
+  .bird {
+    position: fixed;
+    top: var(--y, 50%);
+    left: -60px;
+    font-size: 26px;
+    opacity: 0.9;
+    animation: flyAcross linear forwards;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  @keyframes flyAcross {
+    0%   { transform: translateX(0) translateY(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateX(115vw) translateY(-40px); opacity: 0; }
+  }
+
+  /* Flying hearts (second reveal) */
+  .flyheart {
+    position: fixed;
+    top: var(--y, 50%);
+    left: -60px;
+    font-size: 24px;
+    opacity: 0.9;
+    animation: flyAcross linear forwards;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  /* Confetti hearts + words */
+  .confetti {
+    position: fixed;
+    top: -40px;
+    font-size: 16px;
+    color: #f7d9a0;
+    font-family: Georgia, serif;
+    font-style: italic;
+    opacity: 0.9;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+    z-index: 40;
+  }
+
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translateY(105vh) rotate(280deg); opacity: 0; }
+  }
+
+  .card {
+    background: #f8ecd8;
+    background-image: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    border-radius: 4px;
+    padding: 55px 45px;
+    max-width: 460px;
+    width: 90%;
+    min-height: 240px;
+    text-align: center;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(200,160,100,0.3);
+    z-index: 10;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(1% 2%, 98% 0%, 100% 97%, 3% 100%, 0% 55%);
+    animation: heartbeat 2.4s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    12% { transform: scale(1.015); }
+    24% { transform: scale(1); }
+    36% { transform: scale(1.025); }
+    48% { transform: scale(1); }
+  }
+
+  .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
+  .screen.active { display: flex; }
+
+  .question {
+    font-size: 24px;
+    color: #5a1a2e;
+    margin-bottom: 30px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+  }
+
+  .reveal-text {
+    font-size: 22px;
+    color: #8c1c3a;
+    font-style: italic;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .buttons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+
+  button {
+    border: none;
+    padding: 13px 30px;
+    font-size: 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-family: Georgia, serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: linear-gradient(135deg, #8c1c3a, #b23a55);
+    color: #f8ecd8;
+    box-shadow: 0 8px 18px rgba(140,28,58,0.4);
+  }
+
+  .no-btn {
+    background: #e5d6bd;
+    color: #5a1a2e;
+    box-shadow: none;
+  }
+
+  button:hover { transform: translateY(-2px) scale(1.04); }
+
+  .subtext {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #9c6b4f;
+    font-style: italic;
+  }
+
+  /* Sound toggle */
+  #soundToggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: #f8ecd8;
+    font-size: 16px;
+    padding: 0;
+    box-shadow: none;
+    z-index: 60;
+  }
+
+  /* Hidden easter egg heart */
+  #easterEgg {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    font-size: 14px;
+    opacity: 0.25;
+    z-index: 60;
+    background: none;
+    box-shadow: none;
+    padding: 6px;
+  }
+
+  #easterEgg:hover { opacity: 0.6; }
+
+  #easterMsg {
+    position: fixed;
+    bottom: 40px;
+    left: 16px;
+    background: #f8ecd8;
+    color: #5a1a2e;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-style: italic;
+    max-width: 220px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 60;
+    pointer-events: none;
+  }
+
+  #easterMsg.show { opacity: 1; }
+</style>
+</head>
+<body id="bodyEl">
+
+  <button id="soundToggle" onclick="toggleSound()">🔇</button>
+  <button id="easterEgg" onclick="showEasterEgg()">♡</button>
+  <div id="easterMsg">You found me 🥰 I love you extra today.</div>
+
+  <div class="card" id="cardEl">
+
+    <div class="screen active" id="screenAsk">
+      <div class="question">I have a message for you 💌</div>
+      <div class="buttons">
+        <button onclick="playBirdsThenReveal()">Yes</button>
+        <button class="no-btn" onclick="goTo('screenPleaseYes')">No</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screenPleaseYes">
+      <div class="question">But please, see the message 🥺</div>
+      <div class="buttons">
+        <button onclick="playBirdsThenReveal()">Yes</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screenMsg1">
+      <div class="question">You know, there's a problem in my hand.</div>
+      <div class="buttons" id="problemBtnWrap">
+        <button onclick="revealProblem()">What's the problem?</button>
+      </div>
+      <div class="reveal-text" id="problemReveal" style="display:none;">It's not holding yours.</div>
+      <div class="buttons" id="nextMsgWrap" style="display:none; margin-top: 24px;">
+        <button onclick="playHeartsThenReveal()">See another message</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screenColor">
+      <div class="question">What's my favorite color?</div>
+      <div class="buttons" id="colorBtnWrap">
+        <button onclick="revealColor()">Tell me</button>
+      </div>
+      <div class="reveal-text" id="colorReveal" style="display:none;">The color of your eyes 💙</div>
+      <div class="buttons" id="continueWrap" style="display:none; margin-top: 24px;">
+        <button onclick="goToNext()">Continue</button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  const bodyEl = document.getElementById("bodyEl");
+  let soundEnabled = false;
+  let audioCtx = null;
+
+  function goTo(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  function goToNext() {
+    // Update this once your scratch-to-reveal page is ready
+    window.location.href = "question5.html";
+  }
+
+  // ---- Sound toggle + soft chime ----
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById("soundToggle").textContent = soundEnabled ? "🔊" : "🔇";
+    if (soundEnabled && !audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+
+  function playChime() {
+    if (!soundEnabled || !audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 720;
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.15);
+  }
+
+  document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("mouseenter", playChime);
+  });
+
+  // ---- Easter egg ----
+  function showEasterEgg() {
+    const msg = document.getElementById("easterMsg");
+    msg.classList.add("show");
+    setTimeout(() => msg.classList.remove("show"), 3000);
+  }
+
+  // ---- Birds flying, then reveal message 1 ----
+  function playBirdsThenReveal() {
+    spawnFlock("bird", "🕊️", () => goTo("screenMsg1"));
+  }
+
+  // ---- Hearts flying, then reveal color question ----
+  function playHeartsThenReveal() {
+    spawnFlock("flyheart", "💗", () => goTo("screenColor"));
+  }
+
+  function spawnFlock(className, emoji, onDone) {
+    const count = 7;
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const el = document.createElement("div");
+        el.classList.add(className);
+        el.textContent = emoji;
+        el.style.setProperty("--y", (10 + Math.random() * 70) + "vh");
+        el.style.animationDuration = (2 + Math.random() * 1.2) + "s";
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+      }, i * 180);
+    }
+    setTimeout(onDone, 1600);
+  }
+
+  // ---- Reveal "It's not holding yours" ----
+  function revealProblem() {
+    document.getElementById("problemBtnWrap").style.display = "none";
+    document.getElementById("problemReveal").style.display = "block";
+    document.getElementById("nextMsgWrap").style.display = "flex";
+    spawnConfetti();
+  }
+
+  // ---- Reveal "color of your eyes" ----
+  function revealColor() {
+    document.getElementById("colorBtnWrap").style.display = "none";
+    document.getElementById("colorReveal").style.display = "block";
+    document.getElementById("continueWrap").style.display = "flex";
+    spawnConfetti();
+  }
+
+  // ---- Confetti of tiny hearts + words ----
+  function spawnConfetti() {
+    const items = ["♥", "always", "♥", "yours", "♥", "forever", "♥"];
+    for (let i = 0; i < 24; i++) {
+      setTimeout(() => {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+        c.textContent = items[Math.floor(Math.random() * items.length)];
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.fontSize = (13 + Math.random() * 10) + "px";
+        c.style.animationDuration = (3 + Math.random() * 2.5) + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 6000);
+      }, i * 60);
+    }
+  }
+</script>
+
+</body>
+</html>index.html
